@@ -30,12 +30,21 @@ jobs:
     - name: "autoconf"
       run: ./autogen.sh
     - name: "cofigure"
-      run: ./configure --enable-nc --prefix=$PWD/obj
+      run: ./configure --enable-nc --prefix=$PWD/obj --with-openssldir=$PWD/obj/etc/libressl --sysconfdir=PWD/obj/etc/libressl
     - name: "build"
       run: gnumake -j$(sysctl -n hw.ncpu)
     - name: "build"
       run: gnumake -j$(sysctl -n hw.ncpu) install
+      if: "${{ matrix.arch == 'x86_64' }}"
     - name: "upload"
       uses: actions/upload-artifact@v4.1.0
       with:
-        path: .
+        name: libressl-x86_64
+        path: ./obj
+
+      if: "${{ matrix.arch == 'arm64' }}"
+    - name: "upload"
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: libressl-arm64
+        path: ./obj
