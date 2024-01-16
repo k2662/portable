@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "macos-11"]
-        arch: ["arm64", "x86_64"]
+        arch: ["x86_64"]
     steps:
     - name: "Install required packages"
       run: brew install automake
@@ -30,21 +30,11 @@ jobs:
     - name: "autoconf"
       run: ./autogen.sh
     - name: "cofigure"
-      run: ./configure --enable-nc --prefix=$PWD/obj --with-openssldir=/usr/local/etc/libressl --sysconfdir=/usr/local/etc/libressl --enable-shared=no --enable-static=yes
+      run: ./configure --enable-nc --prefix=/opt/bin --with-openssldir=/usr/local/etc/libressl --sysconfdir=/usr/local/etc/libressl --enable-shared=no --enable-static=yes
     - name: "build"
       run: gnumake -j$(sysctl -n hw.ncpu)
-    - name: "build"
-      run: gnumake -j$(sysctl -n hw.ncpu) install
-      if: "${{ matrix.arch == 'x86_64' }}"
     - name: "upload"
       uses: actions/upload-artifact@v4.1.0
       with:
         name: libressl-x86_64
-        path: ./obj
-
-      if: "${{ matrix.arch == 'arm64' }}"
-    - name: "upload"
-      uses: actions/upload-artifact@v4.1.0
-      with:
-        name: libressl-arm64
-        path: ./obj
+        path: .
