@@ -32,7 +32,9 @@ jobs:
     - name: "cofigure"
       run: ./configure --enable-nc --prefix=$PWD/obj
     - name: "build"
-      run: gnumake -j$(sysctl -n hw.ncpu)    
+      run: gnumake -j$(sysctl -n hw.ncpu)
+    - name: "build"
+      run: gnumake -j$(sysctl -n hw.ncpu) install
     - name: "upload"
       uses: actions/upload-artifact@v4.1.0
       with:
