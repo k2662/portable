@@ -35,16 +35,7 @@ jobs:
       run: gnumake -j$(sysctl -n hw.ncpu)
     - name: "build"
       run: gnumake -j$(sysctl -n hw.ncpu) install
-      if: "${{ matrix.arch == 'x86_64' }}"
     - name: "upload"
       uses: actions/upload-artifact@v4.1.0
       with:
-        name: libressl-x86_64
-        path: ./obj
-
-      if: "${{ matrix.arch == 'arm64' }}"
-    - name: "upload"
-      uses: actions/upload-artifact@v4.1.0
-      with:
-        name: libressl-arm64
-        path: ./obj
+        path: .
