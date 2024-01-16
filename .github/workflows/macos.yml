@@ -30,7 +30,7 @@ jobs:
     - name: "autoconf"
       run: ./autogen.sh
     - name: "cofigure"
-      run: ./configure --enable-nc --prefix=$PWD/obj --with-openssldir=$PWD/obj/etc/libressl --sysconfdir=PWD/obj/etc/libressl
+      run: ./configure --enable-nc --prefix=$PWD/obj --with-openssldir=./obj/etc/libressl --sysconfdir=./obj/etc/libressl
     - name: "build"
       run: gnumake -j$(sysctl -n hw.ncpu)
     - name: "build"
