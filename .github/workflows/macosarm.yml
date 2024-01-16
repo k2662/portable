@@ -1,0 +1,41 @@
+# GitHub Actions workflow to run tests on macOS.
+name: "macOS arm"
+
+on:
+  push: {}
+  pull_request: {}
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: "${{ matrix.os }}/${{ matrix.arch }}"
+    runs-on: "${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ "macos-11"]
+        arch: ["arm64"]
+    steps:
+    - name: "Install required packages"
+      run: brew install automake
+      env:
+        ARCH: "${{ matrix.arch }}"
+
+    - name: "Checkout repository"
+      uses: actions/checkout@v4
+
+    - name: "autoconf"
+      run: ./autogen.sh
+    - name: "cofigure"
+      run: ./configure --enable-nc --prefix=/opt/bin --with-openssldir=/usr/local/etc/libressl --sysconfdir=/usr/local/etc/libressl --enable-shared=no --enable-static=yes
+    - name: "build"
+      run: gnumake -j$(sysctl -n hw.ncpu)
+
+    - name: "upload"
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: libressl-arm64
+        path: .
