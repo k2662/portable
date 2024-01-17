@@ -30,7 +30,7 @@ jobs:
     - name: "autoconf"
       run: ./autogen.sh
     - name: "cofigure"
-      run: ./configure --enable-nc --prefix=/opt/bin --with-openssldir=/usr/local/etc/libressl --sysconfdir=/usr/local/etc/libressl --enable-shared=no --enable-static=yes
+      run: ./configure --enable-nc --prefix=/opt/bin --with-openssldir=/opt/etc/libressl --sysconfdir=/opt/etc/libressl --enable-shared=no --enable-static=yes
     - name: "build"
       run: gnumake -j$(sysctl -n hw.ncpu)
     - name: "upload"
